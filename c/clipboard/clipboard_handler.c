@@ -5,6 +5,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <stdlib.h>
+
+
 
 #define CLIPBOARD_SELECTION_NAME "CLIPBOARD"
 
@@ -13,8 +16,12 @@ Window window;
 Atom XA_CLIPBOARD, XA_UTF8_STRING;
 bool clipboard_updated;
 
-void init_clipboard(){
+Display* init_clipboard(){
     display = XOpenDisplay(NULL);
+    if (display == NULL) {
+        fprintf(stderr, "Unable to open display. Exiting.\n");
+        exit(1);
+    }
     window = XCreateSimpleWindow(display, DefaultRootWindow(display), 0, 0, 1, 1, 0, BlackPixel(display, 0), BlackPixel(display, 0));
     XA_CLIPBOARD = XInternAtom(display, CLIPBOARD_SELECTION_NAME, False);
     XA_UTF8_STRING = XInternAtom(display, "UTF8_STRING", False);
@@ -23,6 +30,8 @@ void init_clipboard(){
     XFlush(display);
 
     clipboard_updated = false;
+
+    return display;
 }
 
 void read_clipboard()
