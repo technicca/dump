@@ -80,7 +80,7 @@ def main(stdscr):
             ai_choice = random.choice(['rock', 'paper','scissors']) # AI chooses randomly
             if options[current_row] == "Exit":
                 # Write scores to file
-                with open('scores.txt', 'w') as f:
+                with open('temp/scores.txt', 'w') as f:
                     f.write(f'{player_score} {ai_score}')
                 break
             elif options[current_row] == "🪨 Rock":
