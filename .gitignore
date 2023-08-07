@@ -3,3 +3,4 @@ output
 .venv
 test.md
 temp
+__pycache__

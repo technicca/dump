@@ -7,8 +7,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-
-
 #define CLIPBOARD_SELECTION_NAME "CLIPBOARD"
 
 Display *display;
@@ -34,7 +32,7 @@ Display* init_clipboard(){
     return display;
 }
 
-void read_clipboard()
+char* read_clipboard()
 {
     Atom ret_type;
     int ret_format;
@@ -46,8 +44,49 @@ void read_clipboard()
     if(bytes_left > 0)
     {
         result = XGetWindowProperty(display, DefaultRootWindow(display), XA_CLIPBOARD, 0, bytes_left, False, XA_UTF8_STRING, &ret_type, &ret_format, &len, &dummy, &data);
+        // Check the result of XGetWindowProperty
         if(result == Success){
-            printf("Clipboard data: %s\n", data);
+            char* clipboard_data = malloc(len + 1);
+            memcpy(clipboard_data, data, len);
+            clipboard_data[len] = '\0';
+            XFree(data);
+            return clipboard_data;
+        }
+    }
+    return NULL;    // return NULL if unsuccessful
+}
+
+void handle_events(char* clipboard_data) {
+    XEvent event;
+
+    while (!clipboard_updated) {
+        XNextEvent(display, &event);
+
+        switch (event.type) {
+            case SelectionRequest: {
+                XSelectionRequestEvent *req = &event.xselectionrequest;
+
+                if (req->target == XA_UTF8_STRING) {
+                    XChangeProperty(display, req->requestor, req->property, XA_UTF8_STRING, 8, PropModeReplace, (unsigned char *)clipboard_data, strlen(clipboard_data));
+                } else {
+                    XChangeProperty(display, req->requestor, req->property, None, 0, PropModeReplace, NULL, 0);
+                }
+
+                XSelectionEvent sev = {
+                    .type = SelectionNotify,
+                    .requestor = req->requestor,
+                    .selection = req->selection,
+                    .target = req->target,
+                    .property = req->property,
+                    .time = req->time
+                };
+
+                XSendEvent(display, req->requestor, True, NoEventMask, (XEvent *)&sev);
+                clipboard_updated = true;
+                break;
+            }
+            default:
+                break;
         }
     }
 }
@@ -55,4 +94,6 @@ void read_clipboard()
 void write_clipboard(char* data)
 {
     XChangeProperty(display, DefaultRootWindow(display), XA_CLIPBOARD, XA_UTF8_STRING, 8, PropModeReplace, (const unsigned char*)data, strlen(data));
+    clipboard_updated = false;
+    handle_events(data);
 }

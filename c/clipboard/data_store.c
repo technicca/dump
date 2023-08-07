@@ -12,7 +12,9 @@ void init_store(){
 
 void save_data(int slot, char* data){
     strncpy(store[slot], data, MAX_DATA_SIZE);
+    store[slot][MAX_DATA_SIZE - 1] = '\0'; // Ensure null termination
 }
+
 
 char* get_data(int slot){
     return store[slot];

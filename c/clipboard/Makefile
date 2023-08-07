@@ -1,1 +1,1 @@
-rm clip; gcc -g -o clip main.c data_store.c clipboard_handler.c keyboard_handler.c -lX11 -Wall
+rm clip; gcc -g3 -o clip main.c data_store.c clipboard_handler.c keyboard_handler.c -lX11 -Wall
