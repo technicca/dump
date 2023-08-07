@@ -3,3 +3,9 @@ output
 .venv
 test.md
 temp
+__pycache__
+python/__pycache__
+c/clipboard/a.out
+c/clipboard/clip
+c/clipboard/output
+c/a.out
