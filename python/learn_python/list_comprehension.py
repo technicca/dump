@@ -1,4 +1,8 @@
+# This code demonstrates the use of list comprehension in Python to create new lists.
+
 numbers = [1, 2, 3, 4, 5]
+# Using list comprehension to create a new list of even numbers from 'numbers'
+# The condition 'if num % 2 == 0' ensures only even numbers are added to 'numbers_new'
 numbers_new = [num for num in numbers if num % 2 == 0]
 print(numbers_new)
 
