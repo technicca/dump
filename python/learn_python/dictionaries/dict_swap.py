@@ -1,4 +1,6 @@
-# Write a Python function that takes a dictionary as input and returns a new dictionary where the keys and values are swapped. If multiple keys in the original dictionary have the same value, the new dictionary should have a list of keys as the value
+# Write a Python function that takes a dictionary as input and returns a new dictionary where the keys and values are swapped.
+# Purpose of this code: To swap the keys and values of a dictionary.
+# It handles situations where multiple original keys have the same value by grouping them into a list.
 
 ex_dict = {
     'key1': 12,
@@ -12,6 +14,8 @@ If it doesn't, create a new list with the current key as the only element
 Use the setdefault method here'''
 
 def swap_dict(input_dict):
+    # The function 'swap_dict' takes a dictionary as input and swaps its keys with values.
+    # It iterates over each (key,value) pair.
     new_dict = {}
     for key, value in input_dict.items():
         if value in input_dict.keys():
@@ -30,8 +34,10 @@ def swap_dict(input_dict):
     new_dict = {}
     for key, value in input_dict.items():
         if value in new_dict:
+            # If this value is already a key in 'new_dict', append the original 'key' to the associated list.
             new_dict[value].append(key)
         else:
+            # If this value is not a key in 'new_dict', create a new list with this 'key'.
             new_dict[value] = [key]
     return new_dict
 print(swap_dict(ex_dict))

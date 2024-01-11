@@ -1,14 +1,21 @@
+# This code is designed to convert a given string into a dictionary representation,
+# with each character as a key and the count of occurrences of the character as the value.
+
 # Write a Python function that takes a string as input and returns a dictionary where the keys are the characters in the string and the values are the number of times each character appears in the string.
 
 example = 'Scatter'
 dictionary = {}
 
 def to_dict(any_string):
+    # The function iterates over each character in the input string.
     for char in any_string:
+        # If the character is already in the dictionary, increment its count.
         if char in dictionary:
             dictionary[char] += 1
+        # Otherwise, add the character to the dictionary with a count of 1.
         else:
             dictionary[char] = 1
+    # After iterating through all characters, return the dictionary.
     return dictionary
 print(to_dict(example))
 
