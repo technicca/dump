@@ -1,3 +1,5 @@
+# This code creates an interactive menu that allows the user to select an option using the arrow keys or by entering a number.
+# It displays options and tracks the user's selection, then returns the chosen index.
 # Original solution sourced from:
 #       https://unix.stackexchange.com/questions/146570/arrow-key-enter-menu
 #
@@ -23,7 +25,7 @@ function select_option {
 	cursor_blink_on()	{ printf "$ESC[?25h"; }
 	cursor_blink_off()	{ printf "$ESC[?25l"; }
 	cursor_to()			{ printf "$ESC[$1;${2:-1}H"; }
-	print_option()		{ printf "\t   $1 "; }
+	print_option()		{ printf "\t   $1 "; } # Print a non-selected menu option.
 	print_selected()	{ printf "\t${COLOR_GREEN}  $ESC[7m $1 $ESC[27m${NC}"; }
 	get_cursor_row()	{ IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
   key_input() {
@@ -75,6 +77,7 @@ function select_option {
 	cursor_blink_off
 
 	while true; do
+    # Begin the loop for user to select an option.
     # print options by overwriting the last lines
 		local idx=0
     for opt in "${options[@]}"; do
